@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif ;
+}
+
+.header-left {
+   margin-left: 40px;
+   margin-top: 10px;
+}
+
+.header-left img {
+    width: 130px;
+    height: 60px;
+    margin: 10px 30px;
+}
+
+.header-search form{
+   display: flex;
+   justify-content: center;
+   margin-top: 20px;
+}
+.header-search input {
+    border: 1px solid #999;
+    border-radius: none;
+}
+.header-search button {
+    border: 1px solid transparent;
+    background: #eee;
+    width: 100px;
+    text-align: center;
+    padding: 5px;
+    
+    
+}
+ .header i {
+    font-size: 2rem;
+    color: #555;
+    cursor: pointer;
+}
+
+.header-icons {
+    display: flex;
+    align-items: flex-end;
+   margin-left: 100px;
+}
+
+.header-icons i {
+    padding: 20px;
+    margin-top:10px;
+    
+    
+}
+
+.signin {
+    border: none;
+    background: none;
+}
+.signin:hover {
+    background: #aaa;
+}
+
+
+
+.sidebar span {
+    font-size: 2rem;
+    color: #555;
+    cursor: pointer;
+    padding: 15px;
+}
+
+.sidebar-category:hover {
+    cursor: pointer;
+    background: #eee;
+}
+
+.sidebar {
+    margin-left: 20px;
+}
+
+.sidebar-category {
+    font-weight: 50px;
+    font-size: 1.2rem;
+    padding: 5px;
+}
+
+
+
+
