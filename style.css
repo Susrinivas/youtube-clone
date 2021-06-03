@@ -66,6 +66,16 @@ body {
     background: #aaa;
 }
 
+.signout {
+    border: none;
+    background: none;
+    transition:  width 2s easein;
+}
+.signout:hover {
+    background: #aaa;
+    width: 120%;
+}
+
 
 
 .sidebar span {
@@ -90,6 +100,29 @@ body {
     padding: 5px;
 }
 
+.collections {
+    margin: auto;
+    padding: 0;
+    text-align: center;
+    list-style-type: none;
+}
+
+.collection-item {
+    border: 1px solid black;
+    border-radius: 1px;
+    color:blue;
+}
+
+.text-style {
+    font-size: 1rem;
+    font-weight: bold;
+    color: black;
+}
+
+#video-container {
+    border: 1px solid #fff;
+    border-radius: 2px;
+}
 
 
 
