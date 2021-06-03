@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="https://www.iconpacks.net/icons/2/free-youtube-logo-icon-2431-thumb.png" type="image/png">
-    <title>Youtube</title>
+    <title>YouTube</title>
     <!-- google font icons-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
@@ -28,8 +28,8 @@
             
              <div class="col-sm-7">
                <div class="header-search">
-                 <form class='form-group' id=channel-form onsubmit='search()'>
-                   <input type="text" class='form-control form-control-lg'>
+                 <form class='form-group' id=channel-form>
+                   <input type="text" class='form-control form-control-lg' id='channel_input'>
                    <button type='submit' class='btn btn-lg' value='Get Data'><i class="material-icons">search</i></button>
                    </form>
                </div>
@@ -40,11 +40,10 @@
                  <i class="material-icons">videocam</i>
                  <i class="material-icons">apps</i>
                  <i class="material-icons">notifications</i>
-                 <button type='button' class='signin' id='authorize-button'>
-                   <i class="material-icons">account_circle</i></button>
-                 <button type='button' class='signout' id='signout-button'><span class="material-icons">
-                  logout
-                 </i></button>
+                 <button type='button' class='signin login' id='authorize-button'>
+                   <i class="material-icons">account_circle</i>Log in</button>
+                 <button type='button' class='signout logout' id='signout-button'>
+                   <i class="material-icons">logout</i>Log Out</button>
              </div>
            </div>
          </div>
@@ -56,7 +55,7 @@
         <div class="mainbar">
            <div class="sidebar">
                <div class="sidebar-caregories">
-                   <div class="sidebar-category">
+                   <div class="sidebar-category" id='home'>
                     <span class="material-icons">home</span>
                      Home
                    </div>
@@ -64,7 +63,7 @@
                     <span class="material-icons">explore</span>
                      Explore
                    </div>
-                   <div class="sidebar-category">
+                   <div class="sidebar-category" onclick='retriveInfo()'>
                     <span class="material-icons">subscriptions</span>
                     Subscriptions
                    </div>
@@ -100,10 +99,15 @@
         </div>
       </div>
     <!-- videos section starts -->
-      <div class="col-8 " id='video-container'>
-     
+      <div class="col-10" >
+         <div class="row " id='video-container'>
+           
+         </div>
+         <div class="row " id='channel-data'>
+           
+        </div>
       </div>
-      <div class="col-2" id='channel-data'>
+      
 
       </div>
     <!-- videos section ends -->
