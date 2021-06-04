@@ -9,13 +9,13 @@ const channelform = document.getElementById('channel-form');
 const channeldata = document.getElementById('channel-data');
 const videos = document.getElementById('video-container');
 
-let defaultChannel = 'googledevelopers';
+let defaultChannel = 'UC29ju8bIPH5as8OGnQzwJyA';
 
 channelform.addEventListener('submit', e => {
     e.preventDefault();
     const channel1 = document.getElementById('channel_input').value;
     console.log(channel1);
-    getChannel(channel1);
+    //getChannel(channel1);
     topicBasedSearching(channel1);
 })
 
@@ -96,14 +96,32 @@ function handleSignoutClick() {
 function getChannel(channelt){
    gapi.client.youtube.channels.list({
        part: 'snippet,contentDetails,statistics',
-       forUsername: channelt
-   }).then(response => {
+       //forUsername: channelt,
+       id: channelt
+      }).then(response => {
        console.log(response);
         channel= response.result.items[0];
+        if(channelt == defaultChannel ){
         showVideos(channel);
+        }
       })
-   .catch(err => alert('No channel By that name'))
+   .catch(err => alert('No channel By that name ..'))
 }
+
+// function getChannelfromSearch(channelt){
+//     gapi.client.youtube.channels.list({
+//         part: 'snippet,contentDetails,statistics',
+//         //forUsername: channelt,
+//         id: channelt
+//        }).then(response => {
+//         //console.log(response);
+//          channel= response.result.items[0];
+//          console.log(response);
+//          return response;
+//        })
+//     .catch(err => alert('No channel By that name seatrch'))
+//  }
+ 
 
 function retriveInfo() {
     videoContainer.innerHTML = '';
@@ -181,51 +199,62 @@ function showVideos(channel){
         gapi.client.youtube.search.list({
             part: 'snippet',
             q: `${resp}`,
-           maxResults: 16
-                }).then(response => {
+           maxResults: 16,
+           }).then(response => {
                     console.log(response);
-                    
-                     Topic(response)
+                    Topic(response)
          })
-                .catch(err => alert('No channel By that name'))
+                .catch(err => alert('No channel By that name yes'))
         }
 
 
         function Topic(resp){
-        const options = {
-            part: 'snippet',
-            q: `${resp}`,
-           maxResults: 16
-           }
-       console.log('data');
-        const req = gapi.client.youtube.search(options);
-        
-        req.execute(response => {
-    
-            console.log(response);
-            // const playlistitems = response.result.items;
-            // if(playlistitems){
-            //     let  res = "<h4 class='center-align'></h4>";
-            //     playlistitems.forEach(item => {
-            //    const videoId = item.snippet.resourceId.videoId;
-    
-            //    res +=  `
-            //            <div4 class='col-4'>
-            //            <iframe width="100%" height="250" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            //            <p>${channel.snippet.title}</p>
-            //            </div4>
-            //    ` ;
-            //  })
+       
+            console.log(resp);
+            const listitems = resp.result.items;
+            if(listitems){
+                let  res = "<h4 class='center-align'></h4>";
+                listitems.forEach(item => {
+               const videoid = item.id.videoId;
+               res +=  `
+                       <div4 class='col-3'>
+                       <iframe width="100%" height="250" src="https://www.youtube.com/embed/${videoid}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                       <object class='fit' data=${item.snippet.thumbnails.default.url}>
+                       </object>
+                       <p>${item.snippet.title}</p>
+                       <p style='display:inline;'>${item.snippet.channelTitle} </p>
+                       </div4>
+
+               ` ;
+               getChannel(item.id.channelId);
+               
+                })
              
-            //  videoContainer.innerHTML = res;
-            // }else{
-            //     videoContainer.innerHTML = 'No Uploaded Videos';
+             videoContainer.innerHTML = res;
+            }else{
+                videoContainer.innerHTML = 'No Uploaded Videos';
                 
-            // }
+            }
+            
         }
-       )
+
+
+        //playlist creation & updation
+
+
+        function playlist(){
+            console.log('playlist')
+            gapi.client.youtube.playlists.insert({
+                  part: 'snippet,status'
+               
+                }).then(response => {
+                    console.log(response)
+                }).catch(err => {
+                    console.log('error')
+                })
+            }
     
-    }
+    
 
 
 
