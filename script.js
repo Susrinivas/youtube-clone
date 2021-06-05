@@ -28,7 +28,7 @@ home.addEventListener('click', () => {
    if(!channel1){
         getChannel(defaultChannel);
     }else {
-        getChannel(channel1);
+      topicBasedSearching(channel1);
     }
 })
 //Load Auth2 library
@@ -76,19 +76,20 @@ function updateSigninStatus(isSignedIn){
 // Handle login 
 let login = document.getElementsByClassName('login')[0];
 let logout = document.getElementsByClassName('logout')[0];
+
 function handleAuthClick(){
     console.log('authclick')
     gapi.auth2.getAuthInstance().signIn();
     console.log(gapi)
-    login.style.color='red'
-    logout.style.color='black';
+    login.style.display='none'
+    logout.style.display='block';
 }
 
 // Handle logout 
 function handleSignoutClick() {
     gapi.auth2.getAuthInstance().signOut()
-    login.style.color='black';
-    logout.style.color='red';
+    login.style.display='block';
+    logout.style.display='none';
 }
 
 // Get channel from  API 
@@ -104,8 +105,7 @@ function getChannel(channelt){
         if(channelt == defaultChannel ){
         showVideos(channel);
         }
-      })
-   .catch(err => alert('No channel By that name ..'))
+      }).catch(err => alert('No channel By that name ..'))
 }
 
 // function getChannelfromSearch(channelt){
@@ -161,13 +161,16 @@ function showVideos(channel){
         if(playlistitems){
             let  res = "<h4 class='center-align'></h4>";
             playlistitems.forEach(item => {
-           const videoId = item.snippet.resourceId.videoId;
+           let VideoId = item.snippet.resourceId.videoId;
 
            res +=  `
-                   <div4 class='col-3'>
-                   <iframe width="100%" height="250" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                   <div class='col-3 history' id=${VideoId} >
+                   <iframe  width="100%" height="250" src="https://www.youtube.com/embed/${VideoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                    <p>${channel.snippet.title}</p>
-                   </div4>
+                   <button onclick='updatePlaylist(${channel.snippet.title}, ${channel.snippet.description}, ${channel.contentDetails.relatedPlaylists.uploads})'>Add to playlist</button>
+                   <hr>
+                   <br>
+                   </div>
            ` ;
          })
          
@@ -207,52 +210,197 @@ function showVideos(channel){
                 .catch(err => alert('No channel By that name yes'))
         }
 
-
+      var playlisttitle = '';
+      var plalistdescription = '';
         function Topic(resp){
        
             console.log(resp);
             const listitems = resp.result.items;
             if(listitems){
-                let  res = "<h4 class='center-align'></h4>";
+                let  r = "<h4 class='center-align'></h4>";
                 listitems.forEach(item => {
-               const videoid = item.id.videoId;
-               res +=  `
-                       <div4 class='col-3'>
-                       <iframe width="100%" height="250" src="https://www.youtube.com/embed/${videoid}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+               let videoid = item.id.videoId;
+               
+               r +=  `
+                       <div class='col-3 history' id=${videoid} >
+                       <iframe  width="100%" height="250" src="https://www.youtube.com/embed/${videoid}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                        <object class='fit' data=${item.snippet.thumbnails.default.url}>
                        </object>
                        <p>${item.snippet.title}</p>
                        <p style='display:inline;'>${item.snippet.channelTitle} </p>
-                       </div4>
-
+                       <button onclick='updatePlaylist(${item.snippet.title}, ${item.snippet.description}, ${videoid}, ${item.snippet.playlistId})'>Add to playlist</button>
+                       <hr>
+                       <br>
+                       </div>
+                       
+                     
                ` ;
-               getChannel(item.id.channelId);
+               
+                     getChannel(item.snippet.channelId);
                
                 })
              
-             videoContainer.innerHTML = res;
+             videoContainer.innerHTML = requestAnimationFrame;
             }else{
-                videoContainer.innerHTML = 'No Uploaded Videos';
+               // videoContainer.innerHTML = 'No Uploaded Videos';
                 
             }
             
         }
+        var histvideos = '';
 
+        let hist = document.getElementsByClassName('history');
+      //let j=0;
+
+        for(var i=0; i<hist.length; i++){
+          //console.log('event',j++)
+         hist[i].addEventListener('click', event => {
+         
+               let video_id = event.target.id;
+               histvideos +=  `
+                       <div class='col-3'>
+                       <iframe  width="100%" height="250" src="https://www.youtube.com/embed/${video_id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                       <hr>
+                       <br>
+                       </div> ` ;
+                      
+
+          } )
+        }
+      
+       
+        
+        // function history(video){
+        //   console.log('histvideos')   
+        //   histvideos +=  `
+        //                <div class='col-3'>
+        //                <iframe  width="100%" height="250" src="https://www.youtube.com/embed/${video.id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                       
+        //                <hr>
+        //                <br>
+        //                </div>
+                     
+        //        ` ;
+
+         
+
+        // }
+
+        function displayHistory(){
+          console.log(histvideos)
+          videoContainer.innerHTML = histvideos;
+          console.log('displayh')
+        }
 
         //playlist creation & updation
+  //var myplaylistId ='';
+  
+  function playlist(){
+    document.getElementById('channel-data').innerHTML = '';
+
+    let content = `<form id='create_playlist' onsubmit=formsubmit(event)>
+    <input type='text' class='form-control title mb-3 mx-auto'>
+    <input type='text' class='form-control description mb-3 mx-auto'>
+    <button type='submit' class='btn btn-primary'>Submit</button>
+    </form>`
+    videoContainer.innerHTML = content;
+     
+  }
+   
+  
+  var form1 = document.getElementById('create_playlist');
+
+ function formsubmit(e) {
+    e.preventDefault();
+    let titleVal = document.getElementsByClassName('title')[0].value;
+    let descript = document.getElementsByClassName('description')[0].value;
+    console.log(titleVal,descript);
+    Createplaylist(titleVal,descript);
+  }
 
 
-        function playlist(){
+  function Createplaylist(title,description){
+         
             console.log('playlist')
-            gapi.client.youtube.playlists.insert({
-                  part: 'snippet,status'
+             gapi.client.youtube.playlists.insert({
+                  'part' : 'snippet,status',
+                  "resource": {
+                    "snippet": {
+                      "title": `${title}`,
+                      "description": `${description}`,
+                      "tags": [
+                        "sample playlist",
+                        "API call"
+                      ],
+                      "defaultLanguage": "en"
+                    },
+                    "status": {
+                      "privacyStatus": "private"
+                    }
+                  }
                
+                }).then(response => {
+                    console.log(response);
+                    myplaylistId = response.result.id;
+                    console.log(myplaylistId);
+                }).catch(err => {
+                    console.log('error')
+                })
+            }
+
+            function updatePlaylist(title, description,  myplaylistid) {
+                gapi.client.youtube.playlists.update({
+                  "part": [
+                    "snippet,status"
+                  ],
+                  "resource": {
+                    "id": `${myplaylistid}`,
+                    "snippet": {
+                      "title": `${title}`,
+                      "description": `${description}`,
+                      "tags": [
+                        "updated playlist",
+                        "API FTW"
+                      ]
+                    },
+                    "status": {
+                      "privacyStatus": "private"
+                    }
+                  }
                 }).then(response => {
                     console.log(response)
                 }).catch(err => {
                     console.log('error')
                 })
             }
+
+
+            function addVideotoPlaylist() {
+                gapi.client.youtube.playlistItems({
+                  "part": [
+                    "snippet,status"
+                  ],
+                  "resource": {
+                    "id": `${myplaylistId}`,
+                    "snippet": {
+                      "title": "Updated sample playlist created via API",
+                      "description": "This is the updated playlist description.",
+                      "tags": [
+                        "updated playlist",
+                        "API FTW"
+                      ]
+                    },
+                    "status": {
+                      "privacyStatus": "private"
+                    }
+                  }
+                }).then(response => {
+                    console.log(response)
+                }).catch(err => {
+                    console.log('error')
+                })
+            }
+
     
     
 
