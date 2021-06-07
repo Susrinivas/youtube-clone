@@ -1,7 +1,7 @@
-const Client_id = '267085355717-egmkf1o2q9oocudbbtj3sr8gaqero5q4.apps.googleusercontent.com';
+const Client_id = '999917681683-gdrcgkriod2gp5v0og1cshhim141tdov.apps.googleusercontent.com';
 const Discover_docs = ['https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest'];
 const Scopes = 'https://www.googleapis.com/auth/youtube';
-const Api_key = 'AIzaSyDrjcA6BtE5-wEoOp0jTXGG0Gnkgj7tLlw';
+const Api_key = 'AIzaSyDgxU13QcmLImQNFFW-jPkdj9pAtrebvEc';
 const authorizeButton = document.getElementById('authorize-button');
 const signoutButton = document.getElementById('signout-button');
 
